@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shuffle Name Cards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #0e0e0e;
+            color: #fefefefe;
+            /* display: flex; */
+            /* flex-direction: column; */
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #d50622;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #86101f;
+        }
+        .card-container {
+            display: flex;
+            margin: auto;
+            flex-wrap: wrap;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 250px;
+            margin-top: 20px;
+            gap: 15px;
+        }
+        .card {
+            background-color: #4b4b4b;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+        .card.shuffle-animation {
+            transform: rotateY(360deg);
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Meeting Order</h1>
+    <button onclick="shuffleCards()">Shuffle</button>
+    <div class="card-container" id="cardContainer">
+        <!-- Cards will be dynamically generated here -->
+    </div>
+
+    <script>
+        const names = ["HR", "Marketing", "Construction", "Pre-Construction", "Engineering", "Busienss Operations", "Business Development", "HSQE", "Workforce Development"];
+        const cardContainer = document.getElementById("cardContainer");
+
+        // Function to display the cards
+        function displayCards(nameList) {
+            cardContainer.innerHTML = ''; // Clear previous cards
+            nameList.forEach((name, index) => {
+                const card = document.createElement("div");
+                card.className = "card";
+                card.textContent = name;
+                card.style.animationDelay = `${index * 0.1}s`;
+                cardContainer.appendChild(card);
+            });
+        }
+
+        // Function to shuffle the cards
+        function shuffleCards() {
+            const cards = document.querySelectorAll(".card");
+
+            // Add shuffle animation to each card
+            cards.forEach((card) => {
+                card.classList.add("shuffle-animation");
+                setTimeout(() => card.classList.remove("shuffle-animation"), 400);
+            });
+
+            // Shuffle the names array
+            const shuffledNames = names
+                .map((name) => ({ name, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map((item) => item.name);
+
+            // Redisplay the shuffled names with a slight delay for animation
+            setTimeout(() => displayCards(shuffledNames), 400);
+        }
+
+        // Initial display of cards
+        displayCards(names);
+    </script>
+</body>
+</html>
